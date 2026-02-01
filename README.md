@@ -6,6 +6,16 @@ This playbook handles server hardening and basic setup — it does **not** insta
 
 Based on [Kamal Ansible Manager](https://github.com/guillaumebriday/kamal-ansible-manager) by [Guillaume Briday](https://github.com/guillaumebriday).
 
+## Compatibility
+
+**Operating Systems:**
+- Ubuntu (20.04+)
+- Debian (11+)
+
+**Architectures:**
+- AMD64 / x86_64
+- ARM64 / aarch64
+
 ## What it does
 
 - **packages**: Installs essential packages (curl, git, htop, fail2ban, ufw, etc.), enables unattended upgrades, removes snap
@@ -14,20 +24,60 @@ Based on [Kamal Ansible Manager](https://github.com/guillaumebriday/kamal-ansibl
 - **docker** (optional): Installs Docker CE from official repo
 - **reboot_if_needed**: Reboots if kernel updates require it
 
+### About Docker
+
+Docker is **disabled by default**. You'll need to enable it if you plan to use OpenClaw's sandboxed agents feature, which runs code in isolated containers.
+
+To enable Docker, uncomment `- docker` in `playbook.yml`:
+
+```yaml
+roles:
+  - packages
+  - docker  # uncomment this line
+  - firewall
+  - security
+  - reboot_if_needed
+```
+
+## Prerequisites
+
+Install Ansible on your local machine (the one you'll run the playbook from).
+
+**macOS (Homebrew):**
+```bash
+brew install ansible
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt update && sudo apt install ansible
+```
+
+**pip (any platform):**
+```bash
+pip install ansible
+```
+
 ## Getting Started
 
-1. Create an `inventory` file with your server IP:
+1. Clone this repository:
+```bash
+git clone https://github.com/azade-c/openclaw-vps-ansible.git
+cd openclaw-vps-ansible
+```
+
+2. Create an `inventory` file with your server IP:
 ```ini
 [webservers]
 your.server.ip.address
 ```
 
-2. Install the requirements:
+3. Install Ansible Galaxy requirements:
 ```bash
 ansible-galaxy install -r requirements.yml
 ```
 
-3. Run the playbook:
+4. Run the playbook:
 ```bash
 ansible-playbook playbook.yml
 ```
@@ -44,11 +94,9 @@ vars:
   security_autoupdate_reboot_time: "03:00"
 ```
 
-To enable Docker, uncomment `- docker` in the roles list.
-
 ## After this playbook
 
-Your VPS is ready. Now install OpenClaw following the [official docs](https://docs.openclaw.ai).
+Your VPS is ready for OpenClaw. Follow the [official installation guide](https://docs.openclaw.ai) to complete the setup.
 
 ## License
 
