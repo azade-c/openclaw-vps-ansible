@@ -12,4 +12,6 @@
     # - docker
     - firewall
     - security
+    - zram
+    - tmpfs
     - reboot_if_needed
